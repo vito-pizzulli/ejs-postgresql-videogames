@@ -1,98 +1,109 @@
 <%- include("partials/header.ejs") %>
 
-<div class="container">
 
-    <!-- Home Button -->
-    <form method="GET" action="/">
-        <button type="submit">Home</button>
+<!-- Navigation Buttons -->
+<form method="GET">
+    <button type="submit" formaction="/">Home</button>
+    <button type="submit" formaction="/library">My Library</button>
+</form>
+
+<!-- Search Section -->
+<div class="search">
+
+    <!-- Show All Videogames -->
+    <form id="show-all" method="GET" action="/">
+        <input type="hidden" name="page" value="1">
+        <button type="submit">Show All Videogames</button>
     </form>
+    
+    <!-- Search Videogame By Text -->
+    <form id="search-text" method="GET" action="/">
+        <input name="search">
+        <input type="hidden" name="page" value="1">
+        <button type="submit">Search</button>
+    </form>
+</div>
 
-    <!-- Search Section -->
-    <div class="search">
+<!-- Success/Error Messages -->
+<p><%= successMessage %></p>
+<p><%= errorMessage %></p>
 
-        <!-- Show All Videogames -->
-        <form id="show-videogames" method="GET" action="/">
-            <h2>All videogames</h2>
-            <input type="hidden" name="page" value="1">
-            <button type="submit">Show</button>
+<!-- Results Section -->
+<% if (locals.result) { %>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Release Date</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Platforms</th>
+                <th scope="col">Genres</th>
+                <th scope="col">Image</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% result.results.forEach((videogame) => { %>
+                <tr>
+                    <td><%= videogame.name %></td>
+                    <td><%= new Date(videogame.released).toLocaleDateString() %></td>
+                    <td><%= videogame.rating %></td>
+                    <td>
+                        <% videogame.platforms.forEach((platform) => { %>
+                            <span class="badge text-bg-info"><%= platform.platform.name %></span>
+                        <% }) %>
+                    </td>
+                    <td>
+                        <% videogame.genres.forEach((genre) => { %>
+                            <span class="badge text-bg-warning"><%= genre.name %></span>
+                        <% }) %>
+                    </td>
+                    <td><img src="<%= videogame.background_image %>" alt="<%= videogame.title %> image" draggable="false"></td>
+                    <td>
+                        <form action="/add" method="POST">
+                            <input type="hidden" name="title" value="<%= videogame.name %>">
+                            <input type="hidden" name="released" value="<%= videogame.released %>">
+                            <input type="hidden" name="rating" value="<%= videogame.rating %>">
+                            <input type="hidden" name="platforms" value="<%= videogame.platforms %>">
+                            <input type="hidden" name="genres" value="<%= videogame.genres %>">
+                            <input type="hidden" name="image" value="<%= videogame.background_image %>">
+                            <button type="submit" class="btn btn-success">Add To Library</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    
+    <!-- Pagination Buttons -->
+    <div class="pag-buttons">
+        <form method="GET" action="/">
+            <% if (result.previous) { %>
+                <% if (locals.searchedText) { %>
+                    <input type="hidden" name="search" value="<%= searchedText %>">
+                <% } %>
+                <input type="hidden" name="page" value="<%= parseInt(currentPage) - 1 %>">
+                <button type="submit">< Previous</button>
+
+            <% } else { %>
+                <button disabled>< Previous</button>
+            <% } %>
         </form>
-        
-        <!-- Search Videogame By Text -->
-        <form id="search-text" method="GET" action="/">
-            <h2>Search a videogame</h2>
-            <input name="search">
-            <input type="hidden" name="page" value="1">
-            <button type="submit">Search</button>
+
+        <p>Current Page:<%= currentPage %></p>
+
+        <form method="GET" action="/">
+            <% if (result.next) { %>
+                <% if (locals.searchedText) { %>
+                    <input type="hidden" name="search" value="<%= searchedText %>">
+                <% } %>
+                <input type="hidden" name="page" value="<%= parseInt(currentPage) + 1 %>">
+                <button type="submit">Next ></button>
+            <% } else { %>
+                <button disabled>Next ></button>
+            <% } %>
         </form>
     </div>
-
-    <!-- Results Section -->
-    <% if (locals.result) { %>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Release Date</th>
-                    <th scope="col">Rating</th>
-                    <th scope="col">Platforms</th>
-                    <th scope="col">Genres</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% result.results.forEach((videogame) => { %>
-                    <tr>
-                        <td><%= videogame.name %></td>
-                        <td><%= videogame.released %></td>
-                        <td><%= videogame.rating %></td>
-                        <td>
-                            <% videogame.platforms.forEach((platform) => { %>
-                                <span class="badge text-bg-info"><%= platform.platform.name %></span>
-                            <% }) %>
-                        </td>
-                        <td>
-                            <% videogame.genres.forEach((genre) => { %>
-                                <span class="badge text-bg-warning"><%= genre.name %></span>
-                            <% }) %>
-                        </td>
-                        <td>
-                            <button class="btn btn-success">Add To Library</button>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-        
-        <!-- Pagination Buttons -->
-        <div class="pag-buttons">
-            <form method="GET" action="/">
-                <% if (result.previous) { %>
-                    <% if (locals.searchedText) { %>
-                        <input type="hidden" name="search" value="<%= searchedText %>">
-                    <% } %>
-                    <input type="hidden" name="page" value="<%= parseInt(currentPage) - 1 %>">
-                    <button type="submit">< Previous</button>
-
-                <% } else { %>
-                    <button disabled>< Previous</button>
-                <% } %>
-            </form>
-
-            <p>Current Page:<%= currentPage %></p>
-
-            <form method="GET" action="/">
-                <% if (result.next) { %>
-                    <% if (locals.searchedText) { %>
-                        <input type="hidden" name="search" value="<%= searchedText %>">
-                    <% } %>
-                    <input type="hidden" name="page" value="<%= parseInt(currentPage) + 1 %>">
-                    <button type="submit">Next ></button>
-                <% } else { %>
-                    <button disabled>Next ></button>
-                <% } %>
-            </form>
-        </div>
-    <% } %>
-</div>
+<% } %>
 
 <%- include("partials/footer.ejs") %>
