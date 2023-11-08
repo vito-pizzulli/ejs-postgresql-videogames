@@ -6,6 +6,7 @@ header {
 main {
     height: 85vh;
     background-color: lightcyan;
+    overflow-y: scroll;
 }
 
 footer {

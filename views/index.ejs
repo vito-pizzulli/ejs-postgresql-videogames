@@ -1,6 +1,70 @@
 <%- include("partials/header.ejs") %>
 
-<h1>Main</h1>
-<p><%=db.database%></p>
+<div class="container">
+
+    <!-- Home Button -->
+    <form method="GET" action="/">
+        <button type="submit">Home</button>
+    </form>
+
+    <!-- Search Section -->
+    <div class="search">
+
+        <!-- Show All Videogames -->
+        <form id="show-videogames" method="GET" action="/">
+            <h2>All videogames</h2>
+            <input type="hidden" name="page" value="1">
+            <button type="submit">Show</button>
+        </form>
+        
+        <!-- Search Videogame By Text -->
+        <form id="search-text" method="GET" action="/">
+            <h2>Search a videogame</h2>
+            <input name="search">
+            <input type="hidden" name="page" value="1">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    <% if (locals.result) { %>
+        <div class="results">
+            <% result.results.forEach(function(videogame) { %>
+                <p><%= videogame.name %></p>
+            <% }) %>
+            <div class=""></div>
+        </div>
+        
+        <!-- Pagination Buttons -->
+        <div class="pag-buttons">
+            <form method="GET" action="/">
+                <% if (result.previous) { %>
+                    <% if (locals.searchedText) { %>
+                        <input type="hidden" name="search" value="<%= searchedText %>">
+                    <% } %>
+                    <input type="hidden" name="page" value="<%= parseInt(currentPage) - 1 %>">
+                    <button type="submit">< Previous</button>
+
+                <% } else { %>
+                    <button disabled>< Previous</button>
+                <% } %>
+            </form>
+
+            <p>Current Page:<%= currentPage %></p>
+
+            <form method="GET" action="/">
+                <% if (result.next) { %>
+                    <% if (locals.searchedText) { %>
+                        <input type="hidden" name="search" value="<%= searchedText %>">
+                    <% } %>
+                    <input type="hidden" name="page" value="<%= parseInt(currentPage) + 1 %>">
+                    <button type="submit">Next ></button>
+                <% } else { %>
+                    <button disabled>Next ></button>
+                <% } %>
+            </form>
+        </div>
+    <% } %>
+</div>
 
 <%- include("partials/footer.ejs") %>
