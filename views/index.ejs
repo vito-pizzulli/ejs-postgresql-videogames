@@ -28,12 +28,40 @@
 
     <!-- Results Section -->
     <% if (locals.result) { %>
-        <div class="results">
-            <% result.results.forEach(function(videogame) { %>
-                <p><%= videogame.name %></p>
-            <% }) %>
-            <div class=""></div>
-        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Release Date</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Platforms</th>
+                    <th scope="col">Genres</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% result.results.forEach((videogame) => { %>
+                    <tr>
+                        <td><%= videogame.name %></td>
+                        <td><%= videogame.released %></td>
+                        <td><%= videogame.rating %></td>
+                        <td>
+                            <% videogame.platforms.forEach((platform) => { %>
+                                <span class="badge text-bg-info"><%= platform.platform.name %></span>
+                            <% }) %>
+                        </td>
+                        <td>
+                            <% videogame.genres.forEach((genre) => { %>
+                                <span class="badge text-bg-warning"><%= genre.name %></span>
+                            <% }) %>
+                        </td>
+                        <td>
+                            <button class="btn btn-success">Add To Library</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
         
         <!-- Pagination Buttons -->
         <div class="pag-buttons">
