@@ -1,0 +1,14 @@
+header {
+    height: 10vh;
+    background-color: lightcoral;
+}
+
+main {
+    height: 85vh;
+    background-color: lightcyan;
+}
+
+footer {
+    height: 5vh;
+    background-color: lightyellow;
+}
