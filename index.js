@@ -20,9 +20,28 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-    res.render("index.ejs", {db: db});
-});
+app.get("/", async (req, res) => {
+    try {
+        const page = req.query.page;
+        const search = req.query.search;
+    
+        if (page && !search) {
+            const result = await axios.get(`${apiUrl}&page=${page}`);
+            res.render("index.ejs", { result: result.data, currentPage: page});
+
+        } else if (page && search) {
+            const result = await axios.get(`${apiUrl}&search=${search}&page=${page}&ordering=-rating`);
+            res.render("index.ejs", { result: result.data, currentPage: page, searchedText: search });
+
+        } else {
+            res.render("index.ejs");
+        }
+
+        } catch (error) {
+            console.log(error.response.data);
+            res.status(500);
+        }
+    });
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
