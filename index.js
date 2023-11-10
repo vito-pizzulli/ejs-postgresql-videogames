@@ -9,6 +9,7 @@ import flash from "connect-flash";
 const app = express();
 const port = 3000;
 const apiUrl = process.env.API_URL;
+let searchDone = false;
 
 const db = new pg.Client({
     user: process.env.DB_USER,
@@ -31,19 +32,20 @@ app.use(flash());
 
 app.get("/", async (req, res) => {
     try {
+        searchDone = true;
         const page = req.query.page;
         const search = req.query.search;
     
         if (page && !search) {
             const result = await axios.get(`${apiUrl}&page=${page}`);
-            res.render("index.ejs", { result: result.data, currentPage: page , successMessage: req.flash('success'), errorMessage: req.flash('error')});
+            res.render("index.ejs", { result: result.data, currentPage: page , successMessage: req.flash('success'), errorMessage: req.flash('error'), searchDone: searchDone});
 
         } else if (page && search) {
             const result = await axios.get(`${apiUrl}&search=${search}&page=${page}`);
-            res.render("index.ejs", { result: result.data, currentPage: page, searchedText: search, successMessage: req.flash('success'), errorMessage: req.flash('error') });
+            res.render("index.ejs", { result: result.data, currentPage: page, searchedText: search, successMessage: req.flash('success'), errorMessage: req.flash('error'), searchDone: searchDone});
 
         } else {
-            res.render("index.ejs", { successMessage: req.flash('success'), errorMessage: req.flash('error')});
+            res.render("index.ejs", { successMessage: req.flash('success'), errorMessage: req.flash('error'), searchDone: false});
         }
 
         } catch (error) {

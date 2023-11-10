@@ -1,21 +1,24 @@
 <%- include("partials/header.ejs") %>
 
 <!-- Search Section -->
-<div class="search">
+<% if (!locals.searchDone) { %>
+    <div class="search">
+        <p><strong>Welcome to GameBox!</strong><br>Are you looking for a new game to add to your library, or do you want to see all the games you’ve already added? Choose an option and let’s get started!</p>
 
-    <!-- Show All Videogames -->
-    <form id="show-all" method="GET" action="/">
-        <input type="hidden" name="page" value="1">
-        <button type="submit">Show All Videogames</button>
-    </form>
-    
-    <!-- Search Videogame By Text -->
-    <form id="search-text" method="GET" action="/">
-        <input name="search">
-        <input type="hidden" name="page" value="1">
-        <button type="submit">Search</button>
-    </form>
-</div>
+        <!-- Show All Videogames -->
+        <form id="show-all" method="GET" action="/">
+            <input type="hidden" name="page" value="1">
+            <button type="submit">Show All Videogames</button>
+        </form>
+        
+        <!-- Search Videogame By Text -->
+        <form id="search-text" method="GET" action="/">
+            <input name="search" placeholder="Type a game's name...">
+            <input type="hidden" name="page" value="1">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+<% } %>
 
 <!-- Success/Error Messages -->
 <p><%= successMessage %></p>
