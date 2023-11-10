@@ -8,12 +8,14 @@ CREATE TABLE videogames (
 
 CREATE TABLE platforms (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    videogame_id INTEGER REFERENCES videogames(id)
+    name VARCHAR(100) NOT NULL,
+    videogame_id INTEGER REFERENCES videogames(id),
+    CONSTRAINT game_platform_combination UNIQUE (name, videogame_id)
 );
 
 CREATE TABLE genres (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    videogame_id INTEGER REFERENCES videogames(id)
+    name VARCHAR(100) NOT NULL,
+    videogame_id INTEGER REFERENCES videogames(id),
+    CONSTRAINT game_genre_combination UNIQUE (name, videogame_id)
 );
