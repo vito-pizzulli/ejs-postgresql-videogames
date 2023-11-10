@@ -62,10 +62,39 @@ app.post("/add", async (req, res) => {
         const release_date = req.body.released;
         const rating = req.body.rating;
         const image = req.body.image;
+        const platform = req.body.platform;
+        const genres = JSON.parse(req.body.genres);
+        let videogameId;
 
-        const result = await db.query(
-            'INSERT INTO videogames(title, release_date, rating, image) VALUES($1, $2, $3, $4)', [title, release_date, rating, image]
+        const dbVideogame = await db.query(
+            'SELECT * FROM videogames WHERE title = $1', [title]
         );
+
+        if (dbVideogame.rows.length === 0) {
+            const result = await db.query(
+                'INSERT INTO videogames(title, release_date, rating, image) VALUES($1, $2, $3, $4) RETURNING id', [title, release_date, rating, image]
+            );
+            videogameId = result.rows[0].id;
+        } else {
+            videogameId = dbVideogame.rows[0].id;
+        };
+
+        const dbPlatform = await db.query(
+            'SELECT * FROM platforms WHERE name = $1 AND id = $2', [platform, videogameId]
+        );
+
+        if (dbPlatform.rows.length === 0) {
+            await db.query(
+                'INSERT INTO platforms (name, videogame_id) VALUES ($1, $2)', [platform, videogameId]
+            );
+        };
+
+        genres.forEach(async (genre) => {
+            await db.query(
+                'INSERT INTO genres (name, videogame_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [genre.name, videogameId]
+            );
+        });
+        
         req.flash('success', 'Game added successfully to your library!');
         res.redirect("/");
 
