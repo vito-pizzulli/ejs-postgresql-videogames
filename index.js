@@ -52,8 +52,11 @@ app.get("/", async (req, res) => {
         }
     });
 
-app.get("/library", (req, res) => {
-    res.render("library.ejs");
+app.get("/library", async (req, res) => {
+    const library = await db.query(
+        "SELECT videogames.title AS title, videogames.release_date AS release_date, videogames.rating AS rating, STRING_AGG(DISTINCT platforms.name, ', ') AS platforms, STRING_AGG(DISTINCT genres.name, ', ') AS genres, videogames.image AS image FROM videogames JOIN platforms ON videogames.id = platforms.videogame_id JOIN genres ON videogames.id = genres.videogame_id GROUP BY videogames.title, videogames.release_date, videogames.rating, videogames.image ORDER BY videogames.title"
+    );
+    res.render("library.ejs", { library: library.rows });
 });
 
 app.post("/add", async (req, res) => {
