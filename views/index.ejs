@@ -64,8 +64,12 @@
                             <input type="hidden" name="title" value="<%= videogame.name %>">
                             <input type="hidden" name="released" value="<%= videogame.released %>">
                             <input type="hidden" name="rating" value="<%= videogame.rating %>">
-                            <input type="hidden" name="platforms" value="<%= videogame.platforms %>">
-                            <input type="hidden" name="genres" value="<%= videogame.genres %>">
+                            <select name="platform">
+                                <% videogame.platforms.forEach((platform) => { %>
+                                    <option value="<%= platform.platform.name %>"><%= platform.platform.name %></option>
+                                <% }); %>
+                            </select>
+                            <input type="hidden" name="genres" value="<%= JSON.stringify(videogame.genres) %>">
                             <input type="hidden" name="image" value="<%= videogame.background_image %>">
                             <button type="submit" class="btn btn-success">Add To Library</button>
                         </form>
