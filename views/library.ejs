@@ -2,40 +2,46 @@
 
 <div class="container">
 
-    <!-- Success/Error Messages -->
-    <p><%= successMessage %></p>
-    <p><%= errorMessage %></p>
-
-    <% library.forEach((videogame) => { %>
-        <div class="card" style="width: 18rem;">
-            <img src="<%= videogame.image %>" class="card-img-top" alt="<%= videogame.title %> Image">
-            <div class="card-body">
-                <h5 class="card-title"><%= videogame.title %></h5>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Release Date: <%= new Date(videogame.release_date).toLocaleDateString() %></li>
-                <li class="list-group-item">Platforms: <%= videogame.platforms %></li>
-                <li class="list-group-item">Genres: <%= videogame.genres %></li>
-                <li class="list-group-item">
-                    <form action="/delete-platform" method="POST">
-                        <input type="hidden" name="videogameId" value="<%= videogame.id %>">
-                        <select name="platform">
-                            <% videogame.platforms.split(',').forEach((platform) => { %>
-                                <option value="<%= platform %>"><%= platform %></option>
-                            <% }); %>
-                        </select>
-                        <button type="submit">Delete Platform</button>
-                    </form>
-                </li>
-                <li class="list-group-item">
-                    <form action="/delete-videogame" method="POST">
-                        <input type="hidden" name="videogameId" value="<%= videogame.id %>">
-                        <button type="submit">Delete Videogame</button>
-                    </form>
-                </li>
-            </ul>
+    <div class="flash-messages">
+        <div class="flash-messages">
+            <p><%= successMessage %></p>
+            <p><%= errorMessage %></p>
         </div>
-    <% }); %>
+</div>
+
+    <div class="card-container">
+        <% library.forEach((videogame) => { %>
+            <div class="card text-bg-dark">
+                <img src="<%= videogame.image %>" class="card-img-top" alt="<%= videogame.title %> Image">
+                <div class="card-body">
+                    <h3 class="card-title"><%= videogame.title %></h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Release Date: <span class="badge text-bg-dark fs-6"><%= new Date(videogame.release_date).toLocaleDateString() %></span></li>
+                    <li class="list-group-item">You own this game on: <strong><%= videogame.platforms %></strong></li>
+                    <li class="list-group-item">Genres: <strong><%= videogame.genres %></strong></li>
+                    <li class="list-group-item">
+                        <div class="delete-buttons">
+                            <form action="/delete-platform" method="POST">
+                                <input type="hidden" name="videogameId" value="<%= videogame.id %>">
+                                <select name="platform">
+                                    <% videogame.platforms.split(',').forEach((platform) => { %>
+                                        <option hidden selected value="">Select platform</option>
+                                        <option value="<%= platform %>"><%= platform %></option>
+                                    <% }); %>
+                                </select>
+                                <button type="submit" class="btn btn-warning">Remove <i class="fa-solid fa-xmark"></i></button>
+                            </form>
+                            <form action="/delete-videogame" method="POST">
+                                <input type="hidden" name="videogameId" value="<%= videogame.id %>">
+                                <button type="submit" class="btn btn-danger">Delete Game <i class="fa-solid fa-trash-can"></i></button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        <% }); %>
+    </div>
 </div>
 
 <%- include("partials/footer.ejs") %>

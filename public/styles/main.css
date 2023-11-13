@@ -234,3 +234,42 @@ table select {
 table select:hover {
     background-color: rgb(30, 30, 30);
 }
+
+div.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+div.card-container div.card {
+    width: calc(100% / 2 - 1rem);
+    height: 100%;
+    border: none;
+}
+
+div.card-container div.card img {
+    max-height: 300px;
+    object-fit: cover;
+    object-position: center;
+}
+
+div.card-container div.delete-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+div.card-container div.delete-buttons select {
+    width: 200px;
+    padding: .5rem 1rem;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    transition: all .3s ease;
+}
+
+div.card-container div.delete-buttons select:hover {
+    background-color: rgb(30, 30, 30);
+}

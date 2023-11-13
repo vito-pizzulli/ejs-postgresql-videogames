@@ -122,16 +122,23 @@ app.post("/delete-platform", async (req, res) => {
         const platform = req.body.platform;
         const result = await db.query('SELECT * FROM platforms WHERE videogame_id = $1', [videogameId]);
 
-        if (result.rows.length === 1) {
-            await db.query('DELETE FROM platforms WHERE name = $1', [platform]);
-            await db.query('DELETE FROM videogames WHERE id = $1', [videogameId]);
-            req.flash('success', 'videogame successfully deleted from your library!');
+        if (platform !== "") {
+            if (result.rows.length === 1) {
+                await db.query('DELETE FROM platforms WHERE name = $1', [platform]);
+                await db.query('DELETE FROM videogames WHERE id = $1', [videogameId]);
+                req.flash('success', 'videogame successfully deleted from your library!');
+            } else {
+                await db.query('DELETE FROM platforms WHERE name = $1', [platform]);
+                req.flash('success', 'platform successfully deleted from your library!');
+            }
+    
+            res.redirect("/library");
+
         } else {
-            await db.query('DELETE FROM platforms WHERE name = $1', [platform]);
-            req.flash('success', 'platform successfully deleted from your library!');
+            req.flash('error', 'no platform has been selected, please try again.');
+            res.redirect("/library");
         }
 
-        res.redirect("/library");
     } catch (err) {
         console.error(err);
         req.flash('error', 'an error occurred while deleting, please try again.');
