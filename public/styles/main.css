@@ -163,12 +163,25 @@ div.search input:focus {
     outline: 2px solid #f75c1e;
 }
 
+div.table-section {
+    margin-bottom: 3rem;
+}
+
 div.pag-buttons {
     position: fixed;
-    height: 10vh;
-    top: 100vh;
-    background-color: red;
+    height: 5vh;
+    top: 95vh;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+div.pag-buttons p {
+    background-color: white;
+    padding: .5rem 1rem;
+    border-radius: 10px;
 }
 
 #add-form {
