@@ -2,6 +2,10 @@
 
 <div class="container">
 
+    <!-- Success/Error Messages -->
+    <p><%= successMessage %></p>
+    <p><%= errorMessage %></p>
+
     <% library.forEach((videogame) => { %>
         <div class="card" style="width: 18rem;">
             <img src="<%= videogame.image %>" class="card-img-top" alt="<%= videogame.title %> Image">
@@ -9,9 +13,16 @@
                 <h5 class="card-title"><%= videogame.title %></h5>
             </div>
             <ul class="list-group list-group-flush">
+                <% console.log(videogame) %>
                 <li class="list-group-item">Release Date: <%= new Date(videogame.release_date).toLocaleDateString() %></li>
                 <li class="list-group-item">Platforms: <%= videogame.platforms %></li>
                 <li class="list-group-item">Genres: <%= videogame.genres %></li>
+                <li class="list-group-item">
+                    <form action="/delete" method="POST">
+                        <input type="hidden" name="videogameId" value="<%= videogame.id %>">
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
             </ul>
         </div>
     <% }); %>

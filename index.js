@@ -56,9 +56,9 @@ app.get("/", async (req, res) => {
 
 app.get("/library", async (req, res) => {
     const library = await db.query(
-        "SELECT videogames.title AS title, videogames.release_date AS release_date, videogames.rating AS rating, STRING_AGG(DISTINCT platforms.name, ', ') AS platforms, STRING_AGG(DISTINCT genres.name, ', ') AS genres, videogames.image AS image FROM videogames JOIN platforms ON videogames.id = platforms.videogame_id JOIN genres ON videogames.id = genres.videogame_id GROUP BY videogames.title, videogames.release_date, videogames.rating, videogames.image ORDER BY videogames.title"
+        "SELECT videogames.id AS id, videogames.title AS title, videogames.release_date AS release_date, videogames.rating AS rating, STRING_AGG(DISTINCT platforms.name, ', ') AS platforms, STRING_AGG(DISTINCT genres.name, ', ') AS genres, videogames.image AS image FROM videogames JOIN platforms ON videogames.id = platforms.videogame_id JOIN genres ON videogames.id = genres.videogame_id GROUP BY videogames.id, videogames.title, videogames.release_date, videogames.rating, videogames.image ORDER BY videogames.title"
     );
-    res.render("library.ejs", { library: library.rows });
+    res.render("library.ejs", { library: library.rows, successMessage: req.flash('success'), errorMessage: req.flash('error')});
 });
 
 app.post("/add", async (req, res) => {
@@ -100,14 +100,26 @@ app.post("/add", async (req, res) => {
             );
         });
         
-        req.flash('success', 'Game added successfully to your library!');
+        req.flash('success', 'Game successfully added to your library!');
         res.redirect("/");
 
     } catch (err) {
         console.error(err);
         req.flash('error', 'You have already added this game to your library.');
         res.redirect("/");
+    }
+});
 
+app.post("/delete", async (req,res) => {
+    try {
+        const videogameId = req.body.videogameId;
+        await db.query('DELETE FROM videogames WHERE id = $1', [videogameId]);
+        req.flash('success', 'Game successfully deleted from your library!');
+        res.redirect("/library");
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'An error occurred while deleting, please try again.');
+        res.redirect("/library");
     }
 });
 
