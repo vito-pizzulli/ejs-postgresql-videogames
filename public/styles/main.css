@@ -1,10 +1,36 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+header,
+footer {
+    background-color: #131b27;
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 0 1rem;
+}
+
 header {
     height: 10vh;
     justify-content: space-around;
+    padding: 0;
+}
+
+header div,
+header nav,
+header form {
+    height: 100%;
+}
+
+header div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 header h1 {
-    color: white;
+    color: #f75c1e;
     margin-bottom: 0;
 }
 
@@ -15,31 +41,28 @@ header p {
 header h1,
 header p {
     font-family: 'Press Start 2P', monospace;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     user-select: none;
 }
 
 header button {
-    background-color: white;
-    color: #0072ce;
-    border-radius: 20px;
-    border: 3px solid transparent;
-    padding: .5rem 1rem;
-    margin: .5rem;
-    font-weight: 600;
+    background-color: transparent;
+    border: none;
+    color: white;
     transition: all .3s ease;
+    font-size: 1.5rem;
+    height: 100%;
+    margin: 0 1rem;
 }
 
 header button:hover {
-    background-color: #0072ce;
-    color: white;
-    border: 3px solid white;
-    transform: scale(1.1);
+    color: #f75c1e;
+    border-bottom: 5px solid #f75c1e;
 }
 
 main {
     height: 85vh;
     overflow-y: scroll;
+    background-color: black;
 }
 
 img {
@@ -49,42 +72,49 @@ img {
 footer {
     height: 5vh;
     justify-content: space-between;
-    font-weight: 600;
 }
 
 footer a {
     text-decoration: none;
     color: white;
+    transition: all .3s ease;
 }
 
-header,
-footer {
-    background-color: #0072ce;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    color: white;
+footer a:hover {
+    color: #f75c1e;
+}
+
+footer strong {
+    color: #f75c1e;
 }
 
 p {
     margin: 0;
 }
 
+div.flash-messages {
+    color: #37f713;
+    font-size: 1.5rem;
+    width: 100%;
+    text-align: center;
+}
+
 div.search {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    position: absolute;
-    top: 15%;
     width: 100%;
-    height: 75%;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    height: 100%;
+    padding: 1rem;
+    gap: 5rem;
 }
 
 div.search form#show-all,
 div.search form#search-text {
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 div.search form#search-text {
@@ -93,50 +123,96 @@ div.search form#search-text {
 }
 
 div.search p {
-    background-color: #0072ce;
     color: white;
-    width: 100%;
     text-align: center;
-    padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-    transition: all .3s ease;
-}
-
-div.search p:hover {
-    padding: 2rem;
-}
-
-div.search p:hover strong {
     font-size: 2rem;
-}
-
-div.search strong {
-    font-family: 'Press Start 2P', monospace;
     transition: all .3s ease;
+    user-select: none;
+    color: #f75c1e;
 }
 
 div.search button {
-    width: 100%;
-    background-color: #0072ce;
-    padding: 1rem;
-    color: white;
-    font-size: 1.5rem;
-    transition: all .3s ease;
+    background-color: transparent;
     border: none;
+    color: white;
+    font-size: 2rem;
+    transition: all .3s ease;
+    padding: 1rem;
 }
 
 div.search button:hover {
-    padding: 2rem;
-    font-size: 2.5rem;
+    color: #f75c1e;
 }
 
 div.search input {
-    width: 30%;
-    margin: 0 auto;
-    height: 3rem;
-    border-radius: 20px 20px 0 0;
-    border: 5px solid #0072ce;
-    border-bottom: none;
+    border-radius: 30px;
+    border: 1px solid white;
     text-align: center;
+    background-color: black;
+    color: #f75c1e;
+    font-size: 1.5rem;
+    padding: .5rem 1rem;
+}
+
+div.search input::placeholder {
+    color: darkgrey;
+}
+
+div.search input:focus {
+    border: 1px solid transparent;
+    outline: 2px solid #f75c1e;
+}
+
+div.pag-buttons {
+    position: fixed;
+    height: 10vh;
+    top: 100vh;
+    background-color: red;
+    width: 100%;
+}
+
+#add-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bg-orange {
+    background-color: #f75c1e;
+    color: black;
+}
+
+table td {
+    vertical-align: middle;
+}
+
+table button {
+    width: 40px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    border: none;
+    background-color: black;
+    color: white;
+    transition: all .3s ease;
+}
+
+table button:hover {
+    transform: scale(1.1);
+    color: #f75c1e;
+}
+
+table select {
+    width: 200px;
+    padding: .5rem 1rem;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    transition: all .3s ease;
+}
+
+table select:hover {
+    background-color: rgb(30, 30, 30);
 }

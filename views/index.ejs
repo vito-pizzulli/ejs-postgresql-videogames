@@ -1,73 +1,82 @@
 <%- include("partials/header.ejs") %>
 
+<!-- Success/Error Messages -->
+<div class="flash-messages">
+    <p><%= successMessage %></p>
+    <p><%= errorMessage %></p>
+</div>
+
 <!-- Search Section -->
 <% if (!locals.searchDone) { %>
     <div class="search">
-        <p><strong>Welcome to GameBox!</strong><br>Are you looking for a new game to add to your library, or do you want to see all the games you’ve already added? Choose an option and let’s get started!</p>
+        <p>here you can add new games to your library! ;)</p>
 
         <!-- Show All Videogames -->
         <form id="show-all" method="GET" action="/">
             <input type="hidden" name="page" value="1">
-            <button type="submit">Show All Videogames</button>
+            <button type="submit">show all games</button>
         </form>
         
         <!-- Search Videogame By Text -->
         <form id="search-text" method="GET" action="/">
-            <input name="search" placeholder="Type a game's name...">
+            <input name="search" placeholder="type a game's name..." required>
             <input type="hidden" name="page" value="1">
-            <button type="submit">Search</button>
+            <button type="submit">search</button>
         </form>
     </div>
 <% } %>
 
-<!-- Success/Error Messages -->
-<p><%= successMessage %></p>
-<p><%= errorMessage %></p>
-
 <!-- Results Section -->
 <% if (locals.result) { %>
-    <table class="table">
+    <table class="table table-dark table-striped text-center">
         <thead>
             <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Release Date</th>
-                <th scope="col">Rating</th>
-                <th scope="col">Platforms</th>
-                <th scope="col">Genres</th>
-                <th scope="col">Image</th>
-                <th scope="col">Actions</th>
+                <th scope="col" class="col-2">Title</th>
+                <th scope="col" class="col-1">Release Date</th>
+                <th scope="col" class="col-1">Rating</th>
+                <th scope="col" class="col-5">Platforms</th>
+                <th scope="col" class="col-1">Genres</th>
+                <th scope="col" class="col-2">Actions</th>
             </tr>
         </thead>
         <tbody>
             <% result.results.forEach((videogame) => { %>
                 <tr>
-                    <td><%= videogame.name %></td>
-                    <td><%= new Date(videogame.released).toLocaleDateString() %></td>
-                    <td><%= videogame.rating %></td>
+                    <td class="fw-semibold"><%= videogame.name %></td>
+                    <td><span class="badge text-bg-light fs-6"><%= new Date(videogame.released).toLocaleDateString() %></span></td>
+                    <% if (videogame.rating !== 0) { %>
+                        <td><span class="badge text-bg-warning fs-6"><%= videogame.rating %></span></td>
+                    <% } else { %>
+                        <td><span class="badge text-bg-warning fs-6">Not specified</span></td>
+                    <% } %>
                     <td>
                         <% videogame.platforms.forEach((platform) => { %>
-                            <span class="badge text-bg-info"><%= platform.platform.name %></span>
+                            <span class="badge bg-orange"><%= platform.platform.name %></span>
                         <% }) %>
                     </td>
+                    <% if (videogame.genres.length > 0) { %>
+                        <td>
+                            <% videogame.genres.forEach((genre) => { %>
+                                <span class="badge text-bg-warning"><%= genre.name %></span>
+                            <% }) %>
+                        </td>
+                    <% } else { %>
+                        <td><span class="badge text-bg-warning">Not specified</span></td>
+                    <% } %>
                     <td>
-                        <% videogame.genres.forEach((genre) => { %>
-                            <span class="badge text-bg-warning"><%= genre.name %></span>
-                        <% }) %>
-                    </td>
-                    <td><img src="<%= videogame.background_image %>" alt="<%= videogame.title %> image" draggable="false"></td>
-                    <td>
-                        <form action="/add" method="POST">
+                        <form id="add-form" action="/add" method="POST">
                             <input type="hidden" name="title" value="<%= videogame.name %>">
                             <input type="hidden" name="released" value="<%= videogame.released %>">
                             <input type="hidden" name="rating" value="<%= videogame.rating %>">
                             <select name="platform">
+                                <option hidden selected value="">Select platform</option>
                                 <% videogame.platforms.forEach((platform) => { %>
                                     <option value="<%= platform.platform.name %>"><%= platform.platform.name %></option>
                                 <% }); %>
                             </select>
                             <input type="hidden" name="genres" value="<%= JSON.stringify(videogame.genres) %>">
                             <input type="hidden" name="image" value="<%= videogame.background_image %>">
-                            <button type="submit" class="btn btn-success">Add To Library</button>
+                            <button type="submit"><i class="fa-solid fa-plus"></i></button>
                         </form>
                     </td>
                 </tr>

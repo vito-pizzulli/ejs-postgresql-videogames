@@ -71,41 +71,47 @@ app.post("/add", async (req, res) => {
         const genres = JSON.parse(req.body.genres);
         let videogameId;
 
-        const dbVideogame = await db.query(
-            'SELECT * FROM videogames WHERE title = $1', [title]
-        );
-
-        if (dbVideogame.rows.length === 0) {
-            const result = await db.query(
-                'INSERT INTO videogames(title, release_date, rating, image) VALUES($1, $2, $3, $4) RETURNING id', [title, release_date, rating, image]
+        if (platform !== "") {
+            const dbVideogame = await db.query(
+                'SELECT * FROM videogames WHERE title = $1', [title]
             );
-            videogameId = result.rows[0].id;
+    
+            if (dbVideogame.rows.length === 0) {
+                const result = await db.query(
+                    'INSERT INTO videogames(title, release_date, rating, image) VALUES($1, $2, $3, $4) RETURNING id', [title, release_date, rating, image]
+                );
+                videogameId = result.rows[0].id;
+            } else {
+                videogameId = dbVideogame.rows[0].id;
+            };
+    
+            const dbPlatform = await db.query(
+                'SELECT * FROM platforms WHERE name = $1 AND id = $2', [platform, videogameId]
+            );
+    
+            if (dbPlatform.rows.length === 0) {
+                await db.query(
+                    'INSERT INTO platforms (name, videogame_id) VALUES ($1, $2)', [platform, videogameId]
+                );
+            };
+    
+            genres.forEach(async (genre) => {
+                await db.query(
+                    'INSERT INTO genres (name, videogame_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [genre.name, videogameId]
+                );
+            });
+            
+            req.flash('success', 'game successfully added to your library!');
+            res.redirect("/");
+
         } else {
-            videogameId = dbVideogame.rows[0].id;
-        };
-
-        const dbPlatform = await db.query(
-            'SELECT * FROM platforms WHERE name = $1 AND id = $2', [platform, videogameId]
-        );
-
-        if (dbPlatform.rows.length === 0) {
-            await db.query(
-                'INSERT INTO platforms (name, videogame_id) VALUES ($1, $2)', [platform, videogameId]
-            );
-        };
-
-        genres.forEach(async (genre) => {
-            await db.query(
-                'INSERT INTO genres (name, videogame_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [genre.name, videogameId]
-            );
-        });
-        
-        req.flash('success', 'Game successfully added to your library!');
-        res.redirect("/");
+            req.flash('error', 'no platform has been selected, please try again.');
+            res.redirect("/");
+        }
 
     } catch (err) {
         console.error(err);
-        req.flash('error', 'You have already added this game to your library.');
+        req.flash('error', 'you have already added this game to your library.');
         res.redirect("/");
     }
 });
@@ -119,16 +125,16 @@ app.post("/delete-platform", async (req, res) => {
         if (result.rows.length === 1) {
             await db.query('DELETE FROM platforms WHERE name = $1', [platform]);
             await db.query('DELETE FROM videogames WHERE id = $1', [videogameId]);
-            req.flash('success', 'Videogame successfully deleted from your library!');
+            req.flash('success', 'videogame successfully deleted from your library!');
         } else {
             await db.query('DELETE FROM platforms WHERE name = $1', [platform]);
-            req.flash('success', 'Platform successfully deleted from your library!');
+            req.flash('success', 'platform successfully deleted from your library!');
         }
 
         res.redirect("/library");
     } catch (err) {
         console.error(err);
-        req.flash('error', 'An error occurred while deleting, please try again.');
+        req.flash('error', 'an error occurred while deleting, please try again.');
         res.redirect("/library");
     }
 });
@@ -137,11 +143,11 @@ app.post("/delete-videogame", async (req,res) => {
     try {
         const videogameId = req.body.videogameId;
         await db.query('DELETE FROM videogames WHERE id = $1', [videogameId]);
-        req.flash('success', 'Videogame successfully deleted from your library!');
+        req.flash('success', 'videogame successfully deleted from your library!');
         res.redirect("/library");
     } catch (err) {
         console.error(err);
-        req.flash('error', 'An error occurred while deleting, please try again.');
+        req.flash('error', 'an error occurred while deleting, please try again.');
         res.redirect("/library");
     }
 });
