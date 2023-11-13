@@ -36,7 +36,7 @@ GameBox è una web-app che rappresenta la soluzione ideale per organizzare la pr
 
 ## Come utilizzare
 1. Apri il tuo browser e vai all'indirizzo `localhost:3000` per utilizzare l'applicazione.
-2. Sulla pagina principale puoi scegliere se visualizzare tutti i giochi disponibili cliccando su `show all games` oppure cercare un gioco per nome digitando il testo nella casella e cliccando su `search`. I risultati saranno visualizzati in una tabella, divisi per pagine.
+2. Sulla pagina principale puoi scegliere se visualizzare tutti i giochi disponibili cliccando su `show all games` oppure cercare un gioco per nome digitando il testo nella casella e cliccando su `search`. I risultati saranno visualizzati in una tabella, divisi per pagine. Con i pulsanti di navigazione in basso, potrai navigare tra le pagine oppure effettuare una nuova ricerca tramite testo.
 3. Per aggiungere un videogioco alla tua libreria personale, seleziona una delle piattaforme e clicca sul simbolo `+`. Verrai reindirizzato alla pagina principale e vedrai un messaggio di conferma in alto.
 4. Per visualizzare la tua libreria personale, clicca sul link `my library` nell'header. Verranno mostrati tutti i giochi che hai aggiunto alla libreria, con le piattaforme che hai scelto. Puoi ritornare alla pagina di ricerca cliccando sul link `search games` nell'header.
 5. Per rimuovere una piattaforma da un gioco, selezionala e clicca su `Remove` La piattaforma verrà eliminata e vedrai un messaggio di conferma in alto. Nel caso un videogioco non sia associato ad altre piattaforme, verrà eliminato anch'esso.
