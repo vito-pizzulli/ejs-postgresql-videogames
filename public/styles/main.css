@@ -152,6 +152,11 @@ div.search input {
     color: #f75c1e;
     font-size: 1.5rem;
     padding: .5rem 1rem;
+    transition: all .3s ease;
+}
+
+div.search input:hover {
+    border: 1px solid orange;
 }
 
 div.search input::placeholder {
