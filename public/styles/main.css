@@ -172,7 +172,7 @@ div.table-section {
     margin-bottom: 3rem;
 }
 
-div.pag-buttons {
+div.search-pagination-buttons {
     position: fixed;
     height: 5vh;
     top: 95vh;
@@ -183,10 +183,25 @@ div.pag-buttons {
     gap: 1rem;
 }
 
-div.pag-buttons p {
+div.search-pagination-buttons p {
     background-color: white;
     padding: .5rem 1rem;
     border-radius: 10px;
+}
+
+div.search-pagination-buttons input {
+    border-radius: 5px;
+    border: none;
+    font-size: 1.3rem;
+    padding: 0 .5rem;
+}
+
+div.search-pagination-buttons form#search-text-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-right: 5rem;
 }
 
 #add-form {

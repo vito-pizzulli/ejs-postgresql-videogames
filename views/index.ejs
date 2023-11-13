@@ -87,7 +87,12 @@
     </div>
     
     <!-- Pagination Buttons -->
-    <div class="pag-buttons">
+    <div class="search-pagination-buttons">
+        <form id="search-text-navigation" method="GET" action="/">
+            <input name="search" placeholder="type a game's name..." required>
+            <input type="hidden" name="page" value="1">
+            <button type="submit" class="btn btn-success">search</button>
+        </form>
         <form method="GET" action="/">
             <% if (result.previous) { %>
                 <% if (locals.searchedText) { %>
